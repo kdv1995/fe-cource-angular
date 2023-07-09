@@ -1,8 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ISignUp, ISignUpResponse } from './signup/sign-up.interface';
-import { ISignIn, ISignInResponse } from './signin/sign-in.interface';
+import {
+  ISignIn,
+  ISignInResponse,
+} from '../components/auth-page/signin/sign-in.interface';
+import {
+  ISignUp,
+  ISignUpResponse,
+} from '../components/auth-page/signup/sign-up.interface';
 
 @Injectable({
   providedIn: 'root',

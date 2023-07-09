@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Post } from './post/post.model';
 import { Router } from '@angular/router';
+import { IPost } from '../components/posts/post/post.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostsService {
-  private posts: Post[] = [];
-  private post!: Post | any;
-  private postsUpdated = new Subject<Post[]>();
-  private postUpdated = new Subject<Post>();
+  private posts: IPost[] = [];
+  private post!: IPost | any;
+  private postsUpdated = new Subject<IPost[]>();
+  private postUpdated = new Subject<IPost>();
   constructor(private http: HttpClient, private router: Router) {}
   /**
    * getPosts
    */
   public getPosts() {
     this.http
-      .get<Post[]>('http://localhost:4000/api/posts')
+      .get<IPost[]>('http://localhost:4000/api/posts')
       .subscribe((data) => {
         this.posts = data;
         this.postsUpdated.next([...this.posts]);
@@ -52,9 +52,9 @@ export class PostsService {
    */
   public addPost(title: string, content: string) {
     let _id = String(Math.random() * 5);
-    const post: Post = { _id, title, content };
+    const post: IPost = { _id, title, content };
     this.http
-      .post<{ message: string; post: Post }>(
+      .post<{ message: string; post: IPost }>(
         'http://localhost:4000/api/posts',
         post
       )
@@ -66,11 +66,11 @@ export class PostsService {
       });
   }
   /**
-   * delelePost
+   * deletePost
    */
-  public delelePost(id: string) {
+  public deletePost(id: string) {
     this.http
-      .delete<{ message: 'Succesfully deleted' }>(
+      .delete<{ message: 'Successfully deleted' }>(
         `http://localhost:4000/api/posts/${id}`
       )
       .subscribe(() => {
@@ -82,7 +82,7 @@ export class PostsService {
   /**
    * editPost
    */
-  public editPost(post: Post) {
+  public editPost(post: IPost) {
     const { _id, title, content } = post;
     this.http
       .put(`http://localhost:4000/api/posts/${_id}`, {

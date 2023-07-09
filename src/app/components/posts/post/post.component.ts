@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Post } from './post.model';
+import { IPost } from './post.model';
 
 @Component({
   selector: 'app-post',
@@ -7,7 +7,7 @@ import { Post } from './post.model';
   styleUrls: ['./post.component.css'],
 })
 export class PostComponent {
-  @Input() post!: Post;
+  @Input() post!: IPost;
   @Output() onDeleteEvent: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() {}

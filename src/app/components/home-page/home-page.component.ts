@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ITable } from '../table/table.interface';
-import { HomepageService } from './homepage.service';
 import { ITab } from '../tab/tab.interface';
+import { HomepageService } from 'src/app/services/homepage.service';
 
 @Component({
   selector: 'app-home-page',
