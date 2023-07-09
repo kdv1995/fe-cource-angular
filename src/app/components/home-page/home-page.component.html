@@ -1,0 +1,9 @@
+<router-outlet></router-outlet>
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+  <mat-tab *ngFor="let tab of tableData" [label]="tab.title">
+    <div style="display: flex">
+      <app-table [data]="tab.data"></app-table>
+      <app-chart [data]="tab.data"></app-chart>
+    </div>
+  </mat-tab>
+</mat-tab-group>

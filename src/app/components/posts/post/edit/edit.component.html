@@ -1,0 +1,40 @@
+<mat-card>
+  <form (submit)="onEditPost(postEditForm)" #postEditForm="ngForm">
+    <div class="edit-container">
+      <mat-form-field>
+        <mat-label>Edit a post title</mat-label>
+        <input
+          matInput
+          type="text"
+          [(ngModel)]="post.title"
+          name="title"
+          required
+          #title="ngModel"
+        />
+        <mat-error *ngIf="title.invalid">{{
+          getErrorMessage("Title")
+        }}</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Edit a post content</mat-label>
+        <textarea
+          matInput
+          cols="10"
+          ngModel
+          name="content"
+          [(ngModel)]="post.content"
+          matInput
+          required
+          minlength="3"
+          #content="ngModel"
+        ></textarea>
+        <mat-error *ngIf="content.invalid">{{
+          getErrorMessage("Content")
+        }}</mat-error>
+      </mat-form-field>
+      <button mat-flat-button class="button" type="submit" color="accent">
+        Save post
+      </button>
+    </div>
+  </form>
+</mat-card>

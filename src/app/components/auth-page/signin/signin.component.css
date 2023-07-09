@@ -1,0 +1,7 @@
+.sign-in-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: 20rem;
+  padding-top: 5rem;
+}
