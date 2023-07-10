@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { Subscription } from 'rxjs';
+import { delay, Observable, tap } from 'rxjs';
 import { PostsService } from 'src/app/services/posts.service';
 import { IPost } from './post/post.model';
 
@@ -9,22 +9,19 @@ import { IPost } from './post/post.model';
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.css'],
 })
-export class PostsComponent implements OnInit, OnDestroy {
-  private postsSub: Subscription = new Subscription();
-  public posts: IPost[] = [];
+export class PostsComponent implements OnInit {
+  posts$: Observable<IPost[]>;
+  loading: boolean = false;
 
   constructor(public postsService: PostsService) {}
 
   ngOnInit(): void {
-    this.postsService.getPosts();
-    this.postsSub = this.postsService
-      .getPostsUpdateListener()
-      .subscribe((posts: IPost[]) => (this.posts = posts));
+    this.loading = true;
+    this.posts$ = this.postsService
+      .getPosts()
+      .pipe(tap(() => (this.loading = false)));
   }
   onDeletePost(id: string) {
     this.postsService.deletePost(id);
-  }
-  ngOnDestroy(): void {
-    this.postsSub.unsubscribe();
   }
 }

@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IPost } from '../post.model';
-import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { PostsService } from 'src/app/services/posts.service';
 
@@ -10,8 +9,7 @@ import { PostsService } from 'src/app/services/posts.service';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css'],
 })
-export class EditComponent implements OnInit, OnDestroy {
-  private postSub: Subscription = new Subscription();
+export class EditComponent implements OnInit {
   public post: IPost = { _id: '', title: '', content: '' };
   public postId!: IPost['_id'];
   constructor(
@@ -22,9 +20,6 @@ export class EditComponent implements OnInit, OnDestroy {
     this.route.params.subscribe((params) => {
       const id: IPost['_id'] = params['id'];
       this.postsService.getPost(id);
-      this.postSub = this.postsService
-        .getPostUpdateListener()
-        .subscribe((post: IPost) => (this.post = post));
       this.postId = id;
     });
   }
@@ -36,8 +31,5 @@ export class EditComponent implements OnInit, OnDestroy {
     const { title, content } = editForm.value;
     const updatedPost = { _id: this.postId, title: title, content: content };
     this.postsService.editPost(updatedPost);
-  }
-  ngOnDestroy(): void {
-    this.postSub.unsubscribe();
   }
 }
