@@ -7,12 +7,15 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Chart } from 'chart.js';
+import { NgChartsModule } from 'ng2-charts';
 import { ITable } from '../table/table.interface';
 
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css'],
+  imports: [NgChartsModule],
+  standalone: true,
 })
 export class ChartComponent implements AfterViewInit, OnInit {
   @Input() data: ITable[];

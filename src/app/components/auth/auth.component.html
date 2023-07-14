@@ -1,0 +1,63 @@
+<div class="auth-page">
+  <div class="container">
+    <h1>{{ title }}</h1>
+    <p>
+      <a mat-button *ngIf="authType === 'signup'" [routerLink]="['/signin']"
+        >Have an account?</a
+      >
+      <a mat-button *ngIf="authType === 'signin'" [routerLink]="['/signup']"
+        >Need an account?</a
+      >
+    </p>
+    <app-list-errors [errors]="errors"></app-list-errors>
+    <form [formGroup]="authForm" (ngSubmit)="submitForm()">
+      <fieldset class="form-container" [disabled]="isSubmitting">
+        <mat-form-field *ngIf="authType === 'signup'">
+          <mat-label>Username</mat-label>
+          <input
+            matInput
+            formControlName="username"
+            placeholder="Username"
+            type="text"
+            autocomplete="username"
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Enter your email</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            type="text"
+            autocomplete="email"
+          />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Enter your password</mat-label>
+          <input
+            formControlName="password"
+            matInput
+            [type]="hide ? 'password' : 'text'"
+            autocomplete="current-password"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="hide = !hide"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+        </mat-form-field>
+        <button
+          mat-button
+          type="submit"
+          color="accent"
+          [disabled]="!authForm.valid"
+        >
+          {{ title }}
+        </button>
+      </fieldset>
+    </form>
+  </div>
+</div>

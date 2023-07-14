@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { IPost } from '../components/posts/post/post.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,11 +26,9 @@ export class PostsService {
   public addPost(title: string, content: string) {
     let _id = String(Math.random() * 5);
     const post: IPost = { _id, title, content };
-    return this.http.post<{ message: string; post: IPost }>(
-      'http://localhost:4000/api/posts',
-      post
-    );
+    return this.http.post<IPost>('http://localhost:4000/api/posts', post);
   }
+
   /**
    * deletePost
    */
@@ -40,16 +37,18 @@ export class PostsService {
       .delete<{ message: 'Successfully deleted' }>(
         `http://localhost:4000/api/posts/${id}`
       )
-      .subscribe(() => {});
+      .subscribe((response) => response);
   }
   /**
    * editPost
    */
   public editPost(post: IPost) {
     const { _id, title, content } = post;
-    return this.http.put(`http://localhost:4000/api/posts/${_id}`, {
-      title,
-      content,
-    });
+    return this.http
+      .put(`http://localhost:4000/api/posts/${_id}`, {
+        title,
+        content,
+      })
+      .subscribe((response) => response);
   }
 }

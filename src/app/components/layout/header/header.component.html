@@ -1,0 +1,32 @@
+<mat-toolbar color="primary">
+  <mat-list-item>
+    <nav
+      style="display: flex; justify-content: space-between; align-items: center"
+    >
+      <!-- <a mat&#45;button routerLink="/">Logo</a> -->
+      <ul *appShowAuthed="false" class="nav-menu">
+        <a mat-button routerLink="/">Home</a>
+        <a mat-button routerLink="/signin" routerLinkActive="active">
+          Sign in
+        </a>
+        <a mat-button routerLink="/signup" routerLinkActive="active">
+          Sign up
+        </a>
+        <!-- <button mat&#45;button (click)="signOut()">Sign out</button> -->
+      </ul>
+      <ul *appShowAuthed="true" class="nav-menu__authenticated">
+        <li>
+          <a
+            mat-button
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            Home
+          </a>
+        </li>
+        <li><a mat-button (click)="signOut()"> Sign out </a></li>
+      </ul>
+    </nav>
+  </mat-list-item>
+</mat-toolbar>
