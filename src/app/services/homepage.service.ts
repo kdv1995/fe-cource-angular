@@ -5,6 +5,9 @@ import { ITable } from '../components/table/table.interface';
   providedIn: 'root',
 })
 export class HomepageService {
+  //*
+  //generateTableDataWithStep
+  //
   public generateTableDataWithStep(step: number, table: ITable[]): ITable[] {
     for (; step <= 10; step++) {
       const row: ITable = {

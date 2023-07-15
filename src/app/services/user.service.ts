@@ -1,5 +1,8 @@
+//Core
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../environments/environment';
+
 import { Router } from '@angular/router';
 import {
   BehaviorSubject,
@@ -9,19 +12,26 @@ import {
   shareReplay,
   tap,
 } from 'rxjs';
+
+//Interfaces
 import {
+  ICurrentUser,
   IUser,
-  IUserSignIn,
-  IUserSignUp,
+  IUserSignInRequest,
+  IUserSignInResponse,
+  IUserSignUpRequest,
+  IUserSignUpResponse,
 } from '../core/interface/user.interface';
-import { environment } from '../environments/environment';
+
+//Services
 import { JwtService } from './jwt.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private currentUserSubject = new BehaviorSubject<IUser | null>(null);
+  private currentUserSubject = new BehaviorSubject<ICurrentUser | null>(null);
+
   public currentUser = this.currentUserSubject
     .asObservable()
     .pipe(distinctUntilChanged());
@@ -39,31 +49,23 @@ export class UserService {
   /**
    * signIn
    */
-  public signIn(credentials: {
-    email: string;
-    password: string;
-  }): Observable<{ user: IUserSignIn }> {
+  public signIn(
+    credentials: IUserSignInRequest
+  ): Observable<{ user: IUserSignInResponse }> {
     return this.http
-      .post<{ user: IUserSignIn }>(`${this.ApiUrl}/signin`, {
+      .post<{ user: IUserSignInResponse }>(`${this.ApiUrl}/signin`, {
         user: credentials,
       })
-      .pipe(
-        tap(({ user }) => {
-          this.setAuth(user);
-          // this.setUserId(user);
-        })
-      );
+      .pipe(tap(({ user }) => this.setAuth(user)));
   }
   /**
    * signUp
    */
-  public signUp(credentials: {
-    username: string;
-    email: string;
-    password: string;
-  }): Observable<{ user: IUserSignUp }> {
+  public signUp(
+    credentials: IUserSignUpRequest
+  ): Observable<{ user: IUserSignUpResponse }> {
     return this.http
-      .post<{ user: IUserSignUp }>(`${this.ApiUrl}/signup`, {
+      .post<{ user: IUserSignUpResponse }>(`${this.ApiUrl}/signup`, {
         user: credentials,
       })
       .pipe(tap(({ user }) => this.setAuth(user)));
@@ -72,15 +74,25 @@ export class UserService {
   /**
    * signOut
    */
-  public signOut(): void {
-    this.deactivateAuth();
-    this.router.navigate(['/']);
+  public signOut(): Observable<{ user: IUser }> {
+    return this.http.get<{ user: IUser }>(`${this.ApiUrl}/signout`).pipe(
+      tap({
+        next: () => {
+          this.deactivateAuth();
+          this.router.navigate(['/']);
+        },
+        error: () => {
+          this.deactivateAuth();
+        },
+      })
+    );
   }
+
   /**
    * getCurrentUser
    */
-  public getCurrentUser(): Observable<{ user: IUserSignIn }> {
-    return this.http.get<{ user: IUserSignIn }>(`${this.ApiUrl}/user`).pipe(
+  public getCurrentUser(): Observable<{ user: ICurrentUser }> {
+    return this.http.get<{ user: ICurrentUser }>(`${this.ApiUrl}/user`).pipe(
       tap({
         next: ({ user }) => this.setAuth(user),
         error: () => this.deactivateAuth(),
@@ -92,7 +104,7 @@ export class UserService {
   /**
    * setAuth
    */
-  public setAuth(user: IUserSignIn): void {
+  public setAuth(user: ICurrentUser): void {
     this.jwt.setToken(user.accessToken);
     this.currentUserSubject.next(user);
   }

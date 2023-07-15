@@ -11,7 +11,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './router/app.routing';
 
 //Global interceptor
-import { TokenInterceptor } from './core/http/token-interceptor.interceptor';
+import { AppInterceptor } from './core/http/app.interceptor';
 
 //Modular components
 import { HeaderComponent } from './components/layout/header/header.component';
@@ -49,7 +49,7 @@ export function initAuth(jwtService: JwtService, userService: UserService) {
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
+      useClass: AppInterceptor,
       multi: true,
     },
   ],

@@ -26,12 +26,15 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 //Interfaces
 import { Errors } from 'src/app/core/interface/error.iterface';
 import { AuthForm } from './auth.interface';
+import {
+  IUserSignInRequest,
+  IUserSignUpRequest,
+} from 'src/app/core/interface/user.interface';
 
 //Components
 import { ListErrorsComponent } from '../shared/lists-errors/list-errors.component';
 
 //Services
-import { LoadingService } from 'src/app/services/loading.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -63,8 +66,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   constructor(
     private readonly userService: UserService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    public loadingService: LoadingService
+    private readonly router: Router
   ) {
     this.authForm = new FormGroup<AuthForm>({
       email: new FormControl('', {
@@ -106,30 +108,19 @@ export class AuthComponent implements OnInit, OnDestroy {
   submitForm(): void {
     this.isSubmitting = true;
     this.errors = { errors: {} };
-    this.loadingService.startLoading();
 
     let observable =
       this.authType === 'signin'
-        ? this.userService.signIn(
-            this.authForm.value as { email: string; password: string }
-          )
-        : this.userService.signUp(
-            this.authForm.value as {
-              email: string;
-              password: string;
-              username: string;
-            }
-          );
+        ? this.userService.signIn(this.authForm.value as IUserSignInRequest)
+        : this.userService.signUp(this.authForm.value as IUserSignUpRequest);
 
     observable.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        this.loadingService.stopLoading(); // Stop loading after successful navigation
         this.router.navigate(['/']);
       },
       error: (err: Errors) => {
         this.errors = err;
         this.isSubmitting = false;
-        this.loadingService.stopLoading(); // Stop loading on error
       },
     });
   }
