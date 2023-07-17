@@ -1,0 +1,12 @@
+<form [formGroup]="modifyForm" (ngSubmit)="submitForm()">
+  <mat-form-field>
+    <mat-label>Title</mat-label>
+    <input matInput type="text" formControlName="title" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <input matInput type="text" formControlName="description" />
+  </mat-form-field>
+
+  <button mat-button>{{ title }}</button>
+</form>

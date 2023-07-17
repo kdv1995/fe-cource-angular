@@ -30,6 +30,34 @@ export const routes: Routes = [
       () => inject(UserService).isAuthenticated.pipe(map((isAuth) => !isAuth)),
     ],
   },
+  {
+    path: 'posts',
+    title: 'Posts',
+    loadComponent: () =>
+      import('../components/shared/posts/posts.component').then(
+        (m) => m.PostsComponent
+      ),
+    // canActivate: [() => inject(UserService).isAuthenticated],
+
+    children: [
+      {
+        path: 'edit:id',
+        title: 'Edit a post',
+        loadChildren: () =>
+          import(
+            '../components/shared/posts/post/modify/modify.component'
+          ).then((m) => m.ModifyComponent),
+      },
+      {
+        path: 'create',
+        title: 'Create a post',
+        loadChildren: () =>
+          import(
+            '../components/shared/posts/post/modify/modify.component'
+          ).then((m) => m.ModifyComponent),
+      },
+    ],
+  },
 ];
 @NgModule({
   imports: [

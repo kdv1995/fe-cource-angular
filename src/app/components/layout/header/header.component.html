@@ -3,7 +3,6 @@
     <nav
       style="display: flex; justify-content: space-between; align-items: center"
     >
-      <!-- <a mat&#45;button routerLink="/">Logo</a> -->
       <ul *appShowAuthed="false" class="nav-menu">
         <a mat-button routerLink="/">Home</a>
         <a mat-button routerLink="/signin" routerLinkActive="active">
@@ -24,6 +23,9 @@
           >
             Home
           </a>
+        </li>
+        <li>
+          <a mat-button routerLink="/posts" routerLinkActive="active">Posts</a>
         </li>
         <li><a mat-button (click)="signOut()"> Sign out </a></li>
       </ul>
