@@ -1,11 +1,30 @@
-<li>
-  <span> Created at {{ post.createdAt | date : "dd/MM/yyyy" }}</span>
-  <span> {{ post.updatedAt | date : "dd/MM/yyyy" }} </span>
+<mat-card class="card">
+  <mat-card-title>
+    {{ post.title[0].value }}
+  </mat-card-title>
+  <mat-card-content class="card__content">
+    {{ post.content[0].value }}
+  </mat-card-content>
 
-  <span>{{ post._id }}</span>
-  <span>Favourite {{ post.favourite }} </span>
-  <div>{{ post.title[0].value }}</div>
-  <div>{{ post.content[0].value }}</div>
+  <mat-card-subtitle>
+    Created at {{ post.createdAt | date : "dd/MM/yyyy" }}
+  </mat-card-subtitle>
 
-  <button [routerLink]="'edit/' + post._id">Edit post</button>
-</li>
+  <mat-card-actions>
+    <button
+      mat-icon-button
+      color="warn"
+      aria-label="Example icon button with a heart icon"
+    >
+      <mat-icon>favorite</mat-icon>
+    </button>
+    <button mat-button>{{ post.favourite }}</button>
+    <button mat-button>Share</button>
+  </mat-card-actions>
+  <mat-card-footer>
+    <button (click)="editPost(post)" mat-button color="accent">
+      Edit post
+    </button>
+  </mat-card-footer>
+</mat-card>
+<mat-divider></mat-divider>

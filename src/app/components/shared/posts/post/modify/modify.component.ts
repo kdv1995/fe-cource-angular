@@ -34,6 +34,7 @@ import { ListErrorsComponent } from '../../../lists-errors/list-errors.component
   standalone: true,
 })
 export class ModifyComponent implements OnInit, OnDestroy {
+  post: any;
   modifyType: string = '';
   title: string = '';
 
@@ -56,9 +57,10 @@ export class ModifyComponent implements OnInit, OnDestroy {
     });
   }
   ngOnInit(): void {
-    this.modifyType = this.route.snapshot.url.at(-1)!.path;
-    console.log(this.modifyType);
-    this.title = this.modifyType === 'edit' ? 'Edit' : 'Create';
+    this.post = history.state.post;
+    this.title = this.route.snapshot.routeConfig?.path?.includes('edit')
+      ? 'Edit'
+      : 'Create';
   }
   ngOnDestroy() {
     this.destroy$.next();

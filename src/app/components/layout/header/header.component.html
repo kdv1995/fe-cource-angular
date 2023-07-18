@@ -1,33 +1,27 @@
 <mat-toolbar color="primary">
-  <mat-list-item>
-    <nav
-      style="display: flex; justify-content: space-between; align-items: center"
-    >
-      <ul *appShowAuthed="false" class="nav-menu">
-        <a mat-button routerLink="/">Home</a>
-        <a mat-button routerLink="/signin" routerLinkActive="active">
-          Sign in
+  <nav
+    style="display: flex; justify-content: space-between; align-items: center"
+  >
+    <ul *appShowAuthed="false" class="nav-menu">
+      <a mat-button routerLink="/">Home</a>
+      <a mat-button routerLink="/signin" routerLinkActive="active"> Sign in </a>
+      <a mat-button routerLink="/signup" routerLinkActive="active"> Sign up </a>
+    </ul>
+    <ul *appShowAuthed="true" class="nav-menu__authenticated">
+      <li>
+        <a
+          mat-button
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Home
         </a>
-        <a mat-button routerLink="/signup" routerLinkActive="active">
-          Sign up
-        </a>
-      </ul>
-      <ul *appShowAuthed="true" class="nav-menu__authenticated">
-        <li>
-          <a
-            mat-button
-            routerLink="/"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
-            Home
-          </a>
-        </li>
-        <li>
-          <a mat-button routerLink="posts" routerLinkActive="active">Posts</a>
-        </li>
-        <li><a mat-button (click)="signOut()"> Sign out </a></li>
-      </ul>
-    </nav>
-  </mat-list-item>
+      </li>
+      <li>
+        <a mat-button routerLink="posts" routerLinkActive="active">Posts</a>
+      </li>
+      <li><a mat-button (click)="signOut()"> Sign out </a></li>
+    </ul>
+  </nav>
 </mat-toolbar>

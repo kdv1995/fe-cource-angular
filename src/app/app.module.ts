@@ -1,6 +1,6 @@
 //Core
 import { EMPTY } from 'rxjs';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -24,6 +24,13 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 //Services
 import { JwtService } from './services/jwt.service';
 import { UserService } from './services/user.service';
+
+//Locales
+import { registerLocaleData } from '@angular/common';
+import localeEn from '@angular/common/locales/en';
+import localeUkr from '@angular/common/locales/uk';
+registerLocaleData(localeEn);
+registerLocaleData(localeUkr);
 
 export function initAuth(jwtService: JwtService, userService: UserService) {
   return () => (jwtService.getToken() ? userService.getCurrentUser() : EMPTY);
@@ -51,6 +58,10 @@ export function initAuth(jwtService: JwtService, userService: UserService) {
       provide: HTTP_INTERCEPTORS,
       useClass: AppInterceptor,
       multi: true,
+    },
+    {
+      provide: LOCALE_ID,
+      useValue: 'en',
     },
   ],
   bootstrap: [AppComponent],

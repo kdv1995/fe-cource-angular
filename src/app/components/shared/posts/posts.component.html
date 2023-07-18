@@ -1,5 +1,24 @@
-<div *ngIf="posts.length <= 0">Posts are not added</div>
-<a mat-button routerLink="create" routerLinkActive="active"> Create post </a>
-<a mat-button routerLink="/posts" routerLinkActive="active">Back to posts</a>
+<div class="buttons-container">
+  <a
+    mat-button
+    class="create"
+    routerLink="create"
+    routerLinkActive="active"
+    color="primary"
+  >
+    Create post
+  </a>
+  <a
+    *ngIf="creatingPost || editingPost"
+    mat-button
+    routerLink="/posts"
+    routerLinkActive="active"
+    color="accent"
+    >Back to posts</a
+  >
+</div>
+<div *ngIf="posts.length <= 0">Loading...</div>
 <router-outlet></router-outlet>
-<app-post *ngFor="let post of posts" [post]="post"> </app-post>
+<ul *ngIf="!editingPost && !creatingPost">
+  <app-post *ngFor="let post of posts" [post]="post"> </app-post>
+</ul>
