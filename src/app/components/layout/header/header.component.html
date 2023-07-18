@@ -22,6 +22,18 @@
         <a mat-button routerLink="posts" routerLinkActive="active">Posts</a>
       </li>
       <li><a mat-button (click)="signOut()"> Sign out </a></li>
+      <mat-form-field>
+        <mat-select [(value)]="currentLanguage">
+          <mat-option value="en">En</mat-option>
+          <mat-option value="pt">Pt</mat-option>
+        </mat-select>
+        {{ currentLanguage }}
+      </mat-form-field>
     </ul>
+    <!-- <select (change)="setLanguage(language)" [(ngModel)]="currentLanguage"> -->
+    <!--   <option *ngFor="let language of languages" [value]="language"> -->
+    <!--     {{ option.language }} -->
+    <!--   </option> -->
+    <!-- </select> -->
   </nav>
 </mat-toolbar>

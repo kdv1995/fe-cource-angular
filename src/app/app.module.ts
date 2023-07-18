@@ -29,6 +29,7 @@ import { UserService } from './services/user.service';
 import { registerLocaleData } from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import localeUkr from '@angular/common/locales/uk';
+import { LanguagesService } from './services/languages.service';
 registerLocaleData(localeEn);
 registerLocaleData(localeUkr);
 
@@ -63,6 +64,7 @@ export function initAuth(jwtService: JwtService, userService: UserService) {
       provide: LOCALE_ID,
       useValue: 'en',
     },
+    LanguagesService,
   ],
   bootstrap: [AppComponent],
 })

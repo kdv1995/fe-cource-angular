@@ -15,6 +15,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Errors } from 'src/app/core/interface/error.iterface';
 import { ListErrorsComponent } from '../../../lists-errors/list-errors.component';
+import { IPost } from '../post.interface';
 
 @Component({
   selector: 'app-modify',
@@ -34,7 +35,7 @@ import { ListErrorsComponent } from '../../../lists-errors/list-errors.component
   standalone: true,
 })
 export class ModifyComponent implements OnInit, OnDestroy {
-  post: any;
+  post: IPost;
   modifyType: string = '';
   title: string = '';
 
@@ -44,23 +45,32 @@ export class ModifyComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<void>();
 
   constructor(private readonly route: ActivatedRoute) {
-    this.modifyForm = new FormGroup({
-      title: new FormControl('', {
-        validators: [Validators.required],
-        nonNullable: true,
-      }),
-      description: new FormControl('', {
-        validators: [Validators.required],
-        nonNullable: true,
-      }),
-      // languages: new FormControl(['']),
-    });
-  }
-  ngOnInit(): void {
     this.post = history.state.post;
-    this.title = this.route.snapshot.routeConfig?.path?.includes('edit')
+    this.title = this.route?.snapshot?.routeConfig?.path?.includes('edit')
       ? 'Edit'
       : 'Create';
+  }
+  ngOnInit(): void {
+    if (this.route.snapshot?.routeConfig?.path?.includes('edit')) {
+      this.modifyForm = new FormGroup({
+        title: new FormControl(this.post.title[0].language, {
+          validators: [Validators.required],
+        }),
+        description: new FormControl(this.post.content[0].language, {
+          validators: [Validators.required],
+        }),
+        // language: new FormControl(this.post.content),
+      });
+    } else {
+      this.modifyForm = new FormGroup({
+        title: new FormControl('', {
+          validators: [Validators.required],
+        }),
+        description: new FormControl('', {
+          validators: [Validators.required],
+        }),
+      });
+    }
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -71,4 +81,8 @@ export class ModifyComponent implements OnInit, OnDestroy {
     this.isSubmitting = true;
     this.errors = { errors: {} };
   }
+}
+
+function ngOnDestroy() {
+  throw new Error('Function not implemented.');
 }

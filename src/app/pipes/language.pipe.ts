@@ -13,24 +13,16 @@ import {
 })
 export class LanguagePipe implements PipeTransform {
   transform(posts: IPost[], language: string): IPostFiltered[] {
-    if (!language) posts;
+    if (!language) {
+      return posts;
+    }
 
-    return posts.map((post: IPostFiltered) => {
-      const filteredTitle = post.title.filter(
-        (data) => data.language === language
-      );
-      const filteredContent = post.content.filter(
-        (data) => data.language === language
-      );
-      const filteredComments = post.comments.filter(
-        (data) => data.language === language
-      );
-
+    return posts.map((post: IPost) => {
       return {
         ...post,
-        title: filteredTitle,
-        content: filteredContent,
-        comments: filteredComments,
+        title: post.title.filter((ps) => ps.language === language),
+        content: post.content.filter((ps) => ps.language === language),
+        comments: post.comments.filter((ps) => ps.language === language),
       };
     });
   }

@@ -26,17 +26,9 @@ export class PostsService {
   public getPaginatedPosts(
     currentPage: currentPageRequest
   ): Observable<IPostResponse> {
-    // return this.http.get<IPost[]>('http://localhost:4000/api/posts');
-    return this.http
-      .get<IPostResponse>(
-        `${this.ApiUrl}/posts/postsByPage?page=${currentPage}`
-      )
-      .pipe(
-        tap({
-          next: () => console.log('Works'),
-          error: () => console.log('not'),
-        })
-      );
+    return this.http.get<IPostResponse>(
+      `${this.ApiUrl}/posts/postsByPage?page=${currentPage}`
+    );
   }
   /**
    * getPost

@@ -3,6 +3,7 @@ interface IPostData {
   language: string;
 }
 export interface IPostCommentsData extends IPostData {}
+
 export interface IPost {
   _id: string;
   title: IPostData[];

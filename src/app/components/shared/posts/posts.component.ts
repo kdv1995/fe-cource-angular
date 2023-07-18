@@ -1,13 +1,13 @@
 //Core
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
 
 //Components
 import { PostComponent } from './post/post.component';
 
 //Services
 import { PostsService } from 'src/app/services/posts.service';
-import { IPost } from './post/post.interface';
+import { IPost, IPostResponse } from './post/post.interface';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,6 +19,7 @@ import {
 } from '@angular/router';
 import { ModifyComponent } from './post/modify/modify.component';
 import { LanguagePipe } from 'src/app/pipes/language.pipe';
+import { LanguagesService } from 'src/app/services/languages.service';
 
 @Component({
   selector: 'app-posts',
@@ -34,20 +35,30 @@ import { LanguagePipe } from 'src/app/pipes/language.pipe';
     RouterLink,
     ModifyComponent,
     AsyncPipe,
-    LanguagePipe,
     RouterLink,
+    LanguagePipe,
   ],
   standalone: true,
 })
 export class PostsComponent implements OnInit, OnDestroy {
+  currentUrl: string = this.router.url;
+  currentLanguage: string;
+
   creatingPost: boolean = false;
   editingPost: boolean = false;
-  currentUrl: string = this.router.url;
-  defaultLocale: string = 'eng';
-  posts: IPost[] = [];
+
   currentPostsPage: number = 1;
+  posts$: Observable<IPost[]>;
+
   destroy$ = new Subject<void>();
-  constructor(private postsService: PostsService, public router: Router) {}
+
+  constructor(
+    private postsService: PostsService,
+    public router: Router,
+    private languageService: LanguagesService
+  ) {
+    this.currentLanguage = this.languageService.getLanguage();
+  }
   /**
    * openEditPostPage
    */
@@ -66,10 +77,9 @@ export class PostsComponent implements OnInit, OnDestroy {
         this.creatingPost = event.url === '/posts/create';
       }
     });
-    this.postsService
+    this.posts$ = this.postsService
       .getPaginatedPosts(this.currentPostsPage)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(({ posts }) => (this.posts = posts));
+      .pipe(map(({ posts }: IPostResponse) => posts));
   }
   ngOnDestroy() {
     this.destroy$.next();
