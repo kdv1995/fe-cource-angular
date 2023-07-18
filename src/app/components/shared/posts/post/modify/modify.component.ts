@@ -11,7 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Errors } from 'src/app/core/interface/error.iterface';
 import { ListErrorsComponent } from '../../../lists-errors/list-errors.component';
@@ -52,7 +52,7 @@ export class ModifyComponent implements OnInit, OnDestroy {
         validators: [Validators.required],
         nonNullable: true,
       }),
-      languages: new FormControl(['']),
+      // languages: new FormControl(['']),
     });
   }
   ngOnInit(): void {

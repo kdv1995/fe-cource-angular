@@ -11,7 +11,6 @@
         <a mat-button routerLink="/signup" routerLinkActive="active">
           Sign up
         </a>
-        <!-- <button mat&#45;button (click)="signOut()">Sign out</button> -->
       </ul>
       <ul *appShowAuthed="true" class="nav-menu__authenticated">
         <li>
@@ -25,7 +24,7 @@
           </a>
         </li>
         <li>
-          <a mat-button routerLink="/posts" routerLinkActive="active">Posts</a>
+          <a mat-button routerLink="posts" routerLinkActive="active">Posts</a>
         </li>
         <li><a mat-button (click)="signOut()"> Sign out </a></li>
       </ul>

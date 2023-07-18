@@ -1,6 +1,11 @@
 <li>
-  {{ post.id }}
-  {{ post.title }}
-  {{ post.description }}
-  <button routerLink="/edit">Edit post</button>
+  <span> Created at {{ post.createdAt | date : "dd/MM/yyyy" }}</span>
+  <span> {{ post.updatedAt | date : "dd/MM/yyyy" }} </span>
+
+  <span>{{ post._id }}</span>
+  <span>Favourite {{ post.favourite }} </span>
+  <div>{{ post.title[0].value }}</div>
+  <div>{{ post.content[0].value }}</div>
+
+  <button [routerLink]="'edit/' + post._id">Edit post</button>
 </li>

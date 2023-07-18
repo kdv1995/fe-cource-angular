@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import {
   IPost,
   currentPageRequest,
+  IPostResponse,
 } from '../components/shared/posts/post/post.interface';
 
 //Environment
@@ -24,10 +25,12 @@ export class PostsService {
    */
   public getPaginatedPosts(
     currentPage: currentPageRequest
-  ): Observable<IPost[]> {
+  ): Observable<IPostResponse> {
     // return this.http.get<IPost[]>('http://localhost:4000/api/posts');
     return this.http
-      .get<IPost[]>(`${this.ApiUrl}posts/postsByPage?page=${currentPage}`)
+      .get<IPostResponse>(
+        `${this.ApiUrl}/posts/postsByPage?page=${currentPage}`
+      )
       .pipe(
         tap({
           next: () => console.log('Works'),

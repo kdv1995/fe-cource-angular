@@ -37,13 +37,12 @@ export const routes: Routes = [
       import('../components/shared/posts/posts.component').then(
         (m) => m.PostsComponent
       ),
-    // canActivate: [() => inject(UserService).isAuthenticated],
-
+    canActivate: [() => inject(UserService).isAuthenticated],
     children: [
       {
-        path: 'edit:id',
+        path: 'edit/:id',
         title: 'Edit a post',
-        loadChildren: () =>
+        loadComponent: () =>
           import(
             '../components/shared/posts/post/modify/modify.component'
           ).then((m) => m.ModifyComponent),
@@ -51,7 +50,7 @@ export const routes: Routes = [
       {
         path: 'create',
         title: 'Create a post',
-        loadChildren: () =>
+        loadComponent: () =>
           import(
             '../components/shared/posts/post/modify/modify.component'
           ).then((m) => m.ModifyComponent),

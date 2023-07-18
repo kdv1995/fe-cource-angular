@@ -2,11 +2,10 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { UserService } from 'src/app/services/user.service';
 import { ShowAuthedDirective } from 'src/app/directives/auth-directive.ts.directive';
-import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-header',
@@ -24,11 +23,7 @@ import { LoadingService } from 'src/app/services/loading.service';
   standalone: true,
 })
 export class HeaderComponent {
-  constructor(
-    private userService: UserService,
-    private loadingService: LoadingService,
-    private readonly router: Router
-  ) {}
+  constructor(private userService: UserService) {}
   currentUser$ = inject(UserService).currentUser;
   signOut(): void {
     this.userService.signOut().subscribe(() => {});
