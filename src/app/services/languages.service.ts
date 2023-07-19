@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LanguagesService {
-  currentLanguage: string = 'pt';
-  constructor() {}
-  setLanguage(language: string): void {
-    this.currentLanguage = language;
-  }
-
-  getLanguage(): string {
-    return this.currentLanguage;
+  private languageSubject = new BehaviorSubject<string>('en');
+  public language$ = this.languageSubject.asObservable();
+  public setLanguage(language: string) {
+    this.languageSubject.next(language);
   }
 }

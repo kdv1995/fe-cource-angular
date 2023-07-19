@@ -1,3 +1,3 @@
 export interface ILanguages {
-  language: string;
+  value: string;
 }
