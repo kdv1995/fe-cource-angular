@@ -9,7 +9,6 @@
         >Need an account?</a
       >
     </p>
-    <app-list-errors [errors]="errors"></app-list-errors>
     <form [formGroup]="authForm" (ngSubmit)="submitForm()">
       <fieldset class="form-container" [disabled]="isSubmitting">
         <mat-form-field *ngIf="authType === 'signup'">

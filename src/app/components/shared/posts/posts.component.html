@@ -9,16 +9,7 @@
   >
     Create post
   </a>
-  <a
-    *ngIf="creatingPost || editingPost"
-    mat-button
-    routerLink="/posts"
-    routerLinkActive="active"
-    color="accent"
-    >Back to posts</a
-  >
 </div>
-<router-outlet></router-outlet>
 <ul *ngIf="!editingPost && !creatingPost">
   <div *ngIf="posts$ | async as posts">
     <app-post
@@ -28,3 +19,4 @@
     </app-post>
   </div>
 </ul>
+<router-outlet></router-outlet>

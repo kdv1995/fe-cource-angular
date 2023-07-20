@@ -31,9 +31,6 @@ import {
   IUserSignUpRequest,
 } from 'src/app/core/interface/user.interface';
 
-//Components
-import { ListErrorsComponent } from '../shared/lists-errors/list-errors.component';
-
 //Services
 import { UserService } from 'src/app/services/user.service';
 
@@ -50,7 +47,6 @@ import { UserService } from 'src/app/services/user.service';
     RouterLink,
     NgIf,
     ReactiveFormsModule,
-    ListErrorsComponent,
   ],
   standalone: true,
 })

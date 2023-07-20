@@ -28,6 +28,7 @@ import { IPost, IPostResponse } from './post/post.interface';
 
 //Pipes
 import { LanguagePipe } from 'src/app/pipes/language.pipe';
+import { LocaleService } from 'src/app/services/locale.service';
 
 @Component({
   selector: 'app-posts',
@@ -63,7 +64,8 @@ export class PostsComponent implements OnInit, OnDestroy {
   constructor(
     private postsService: PostsService,
     public router: Router,
-    private languageService: LanguagesService
+    private languageService: LanguagesService,
+    private localeService: LocaleService
   ) {}
   /**
    * openEditPostPage

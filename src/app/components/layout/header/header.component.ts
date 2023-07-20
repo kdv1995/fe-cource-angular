@@ -10,7 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 //Router
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 //Directives
 import { ShowAuthedDirective } from 'src/app/directives/auth-directive.ts.directive';
@@ -22,6 +22,7 @@ import { UserService } from 'src/app/services/user.service';
 
 //Interfaces
 import { ILanguages } from './language.interface';
+import { LocaleService } from 'src/app/services/locale.service';
 
 @Component({
   selector: 'app-header',
@@ -54,19 +55,14 @@ export class HeaderComponent implements OnInit {
   ];
   constructor(
     private userService: UserService,
-    public languageService: LanguagesService
+    public languageService: LanguagesService,
+    public localeService: LocaleService,
+    private router: Router
   ) {}
   currentUser$ = inject(UserService).currentUser;
   signOut(): void {
     this.userService.signOut().subscribe(() => {});
   }
   ngOnInit(): void {}
-  onOptionChange() {
-    this.languageService.language$.subscribe((language) => {
-      this.currentLanguage = language;
-    });
-  }
-  changeLanguage(language: string) {
-    this.languageService.setLanguage(language);
-  }
+  // switchLanguage(language: string) {}
 }

@@ -1,13 +1,49 @@
-<form [formGroup]="modifyForm" (ngSubmit)="submitForm()">
+<a mat-button routerLink="/posts" routerLinkActive="active" color="accent"
+  >Back to posts</a
+>
+<form *ngIf="currentUrl === 'edit'" [formGroup]="modifyForm">
   <div class="modify-container">
-    <mat-form-field>
-      <mat-label>Title</mat-label>
-      <input matInput type="text" formControlName="title" />
+    <mat-form-field formGroupName="title" *ngFor="let lang of post.title">
+      <mat-label>
+        {{ lang.language | titlecase }}
+      </mat-label>
+      <input
+        placeholder="Title"
+        matInput
+        type="text"
+        [formControlName]="lang.language"
+      />
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>Description</mat-label>
-      <input matInput type="text" formControlName="description" />
+    <mat-form-field formGroupName="content" *ngFor="let lang of post.content">
+      <mat-label> {{ lang.language | titlecase }} </mat-label>
+      <textarea
+        placeholder="Content"
+        matInput
+        [formControlName]="lang.language"
+      ></textarea>
     </mat-form-field>
-    <button mat-button>{{ title }}</button>
+    <button type="submit" mat-button color="primary">{{ title }}</button>
+  </div>
+</form>
+
+<form [formGroup]="modifyForm" *ngIf="currentUrl === 'create'">
+  <div class="modify-container">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+      <mat-tab *ngFor="let tab of modifyForm.value" [label]="tab.locale">
+        <div style="display: flex; flex-direction: column">
+          <mat-form-field>
+            <mat-label>Title</mat-label>
+            <input matInput placeholder="Title" type="text" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Content</mat-label>
+            <textarea placeholder="Content" matInput></textarea>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+    <button mat-button color="accent" type="submit" mat-button>
+      {{ title }}
+    </button>
   </div>
 </form>

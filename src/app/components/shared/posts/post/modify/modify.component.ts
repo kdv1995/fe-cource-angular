@@ -1,20 +1,29 @@
-import { NgIf } from '@angular/common';
+//Core
+import { NgFor, NgIf, TitleCasePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+
+//Form
 import {
+  FormArray,
+  FormBuilder,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
+
+//Material
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
+
+//Route
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Subject } from 'rxjs';
-import { Errors } from 'src/app/core/interface/error.iterface';
-import { ListErrorsComponent } from '../../../lists-errors/list-errors.component';
+import { LanguagesService } from 'src/app/services/languages.service';
 import { IPost } from '../post.interface';
 
 @Component({
@@ -22,6 +31,7 @@ import { IPost } from '../post.interface';
   templateUrl: './modify.component.html',
   styleUrls: ['./modify.component.css'],
   imports: [
+    TitleCasePipe,
     FormsModule,
     MatFormFieldModule,
     MatIconModule,
@@ -30,46 +40,84 @@ import { IPost } from '../post.interface';
     RouterLink,
     NgIf,
     ReactiveFormsModule,
-    ListErrorsComponent,
+    MatSelectModule,
+    NgFor,
+    MatTabsModule,
   ],
   standalone: true,
 })
 export class ModifyComponent implements OnInit, OnDestroy {
   post: IPost;
-  modifyType: string = '';
-  title: string = '';
 
-  modifyForm: FormGroup;
+  modifyForm: FormArray | FormGroup;
+  modifyType: string = '';
   isSubmitting: boolean = false;
-  errors: Errors = { errors: {} };
+
+  title: string = this.route?.snapshot?.routeConfig?.path?.includes('edit')
+    ? 'Edit'
+    : 'Create';
+  currentUrl = this.route.snapshot?.routeConfig?.path?.split('/')[0];
+
   destroy$ = new Subject<void>();
 
-  constructor(private readonly route: ActivatedRoute) {
+  constructor(
+    private readonly route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    public languageService: LanguagesService
+  ) {
     this.post = history.state.post;
-    this.title = this.route?.snapshot?.routeConfig?.path?.includes('edit')
-      ? 'Edit'
-      : 'Create';
   }
+
   ngOnInit(): void {
-    if (this.route.snapshot?.routeConfig?.path?.includes('edit')) {
-      this.modifyForm = new FormGroup({
-        title: new FormControl(this.post.title[0].language, {
-          validators: [Validators.required],
-        }),
-        description: new FormControl(this.post.content[0].language, {
-          validators: [Validators.required],
-        }),
-        // language: new FormControl(this.post.content),
+    this.createForm();
+  }
+
+  initMultiLanguageDataArray(language: string, value: string): FormGroup {
+    return this.formBuilder.group({
+      language: new FormControl(language),
+      translation: new FormControl(value),
+    });
+  }
+  createForm() {
+    if (this.currentUrl === 'edit') {
+      this.modifyForm = this.formBuilder.group({
+        title: this.formBuilder.group({}),
+        content: this.formBuilder.group({}),
       });
+
+      for (const lang of this.post.title) {
+        (this.modifyForm?.get('title') as FormGroup).addControl(
+          lang.language,
+          this.formBuilder.control(lang.value)
+        );
+      }
+      for (const lang of this.post.content) {
+        (this.modifyForm?.get('content') as FormGroup).addControl(
+          lang.language,
+          this.formBuilder.control(lang.value)
+        );
+      }
     } else {
-      this.modifyForm = new FormGroup({
-        title: new FormControl('', {
-          validators: [Validators.required],
+      this.modifyForm = this.formBuilder.array([
+        this.formBuilder.group({
+          locale: this.formBuilder.control('eng'),
+          title: this.formBuilder.array([
+            this.initMultiLanguageDataArray('', ''),
+          ]),
+          content: this.formBuilder.array([
+            this.initMultiLanguageDataArray('', ''),
+          ]),
         }),
-        description: new FormControl('', {
-          validators: [Validators.required],
+        this.formBuilder.group({
+          locale: this.formBuilder.control('pt'),
+          title: this.formBuilder.array([
+            this.initMultiLanguageDataArray('', ''),
+          ]),
+          content: this.formBuilder.array([
+            this.initMultiLanguageDataArray('', ''),
+          ]),
         }),
-      });
+      ]);
     }
   }
   ngOnDestroy() {
@@ -79,10 +127,5 @@ export class ModifyComponent implements OnInit, OnDestroy {
 
   submitForm(): void {
     this.isSubmitting = true;
-    this.errors = { errors: {} };
   }
-}
-
-function ngOnDestroy() {
-  throw new Error('Function not implemented.');
 }

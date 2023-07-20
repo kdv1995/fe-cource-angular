@@ -21,15 +21,18 @@
       <li>
         <a mat-button routerLink="posts" routerLinkActive="active">Posts</a>
       </li>
+      <li>
+        <a mat-button routerLink="forms" routerLinkActive="active">Forms</a>
+      </li>
       <li><a mat-button (click)="signOut()"> Sign out </a></li>
     </ul>
-    <select
-      [(ngModel)]="currentLanguage"
-      (ngModelChange)="changeLanguage(currentLanguage)"
-    >
-      <option *ngFor="let language of languages" [value]="language.value">
-        {{ language.value }}
-      </option>
-    </select>
+    <!-- <select -->
+    <!--   [(ngModel)]="currentLanguage" -->
+    <!--   (ngModelChange)="switchLanguage(currentLanguage)" -->
+    <!-- > -->
+    <!--   <option *ngFor="let language of languages" [value]="language.value"> -->
+    <!--     {{ language.value }} -->
+    <!--   </option> -->
+    <!-- </select> -->
   </nav>
 </mat-toolbar>

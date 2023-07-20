@@ -57,6 +57,15 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'forms',
+    title: 'Forms',
+    loadComponent: () =>
+      import('../components/shared/form/form.component').then(
+        (m) => m.FormComponent
+      ),
+    canActivate: [() => inject(UserService).isAuthenticated],
+  },
 ];
 @NgModule({
   imports: [
