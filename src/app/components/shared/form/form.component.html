@@ -1,10 +1,37 @@
 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-  <label for="first-name">First Name: </label>
-  <input id="first-name" type="text" formControlName="firstName" />
+  <div class="cont">
+    <mat-form-field>
+      <mat-label for="first-name">First Name: </mat-label>
+      <input matInput id="first-name" type="text" formControlName="firstName" />
+      <mat-error *ngIf="profileForm.get('firstName')?.invalid"></mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label for="last-name">Last Name: </mat-label>
+      <input matInput id="last-name" type="text" formControlName="lastName" />
+    </mat-form-field>
 
-  <label for="last-name">Last Name: </label>
-  <input id="last-name" type="text" formControlName="lastName" />
-  <p>complete the form to enable button</p>
-  Status: {{ profileForm.status }}
-  <button type="submit" [disabled]="!profileForm.valid">Submit</button>
+    <button type="button" mat-stroked-button (click)="filePicker.click()">
+      Pick image
+    </button>
+    <input type="file" #filePicker (change)="onImagePicked($event)" />
+    <div
+      class="image-preview"
+      *ngIf="
+        imagePreview !== '' && imagePreview && profileForm.get('image')?.valid
+      "
+    >
+      <img [src]="imagePreview" [alt]="profileForm.value.image" />
+    </div>
+
+    <p>complete the form to enable button</p>
+    Status: {{ profileForm.status }}
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      [disabled]="!profileForm?.valid"
+    >
+      Submit
+    </button>
+  </div>
 </form>

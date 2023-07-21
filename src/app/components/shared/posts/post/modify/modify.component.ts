@@ -127,5 +127,6 @@ export class ModifyComponent implements OnInit, OnDestroy {
 
   submitForm(): void {
     this.isSubmitting = true;
+    this.modifyForm.reset();
   }
 }
