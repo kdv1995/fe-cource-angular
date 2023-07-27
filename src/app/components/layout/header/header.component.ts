@@ -64,5 +64,7 @@ export class HeaderComponent implements OnInit {
     this.userService.signOut().subscribe(() => {});
   }
   ngOnInit(): void {}
-  // switchLanguage(language: string) {}
+  switchLanguage(language: string) {
+    this.languageService.setLanguage(language);
+  }
 }

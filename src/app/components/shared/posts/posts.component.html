@@ -19,4 +19,5 @@
     </app-post>
   </div>
 </ul>
+<div *ngIf="!(posts$ | async)">Empty posts list</div>
 <router-outlet></router-outlet>

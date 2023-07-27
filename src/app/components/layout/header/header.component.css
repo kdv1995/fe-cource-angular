@@ -14,3 +14,9 @@ li {
   justify-content: center;
   gap: 2rem;
 }
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1 1 auto;
+}

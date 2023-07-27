@@ -1,7 +1,11 @@
 <a mat-button routerLink="/posts" routerLinkActive="active" color="accent"
   >Back to posts</a
 >
-<form *ngIf="currentUrl === 'edit'" [formGroup]="modifyForm">
+<form
+  *ngIf="currentUrl === 'edit'"
+  [formGroup]="modifyForm"
+  (ngSubmit)="onSubmit()"
+>
   <div class="modify-container">
     <mat-form-field formGroupName="title" *ngFor="let lang of post.title">
       <mat-label>
@@ -26,18 +30,34 @@
   </div>
 </form>
 
-<form [formGroup]="modifyForm" *ngIf="currentUrl === 'create'">
+<form
+  [formGroup]="modifyForm"
+  *ngIf="currentUrl === 'create'"
+  (ngSubmit)="onSubmit()"
+>
   <div class="modify-container">
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
-      <mat-tab *ngFor="let tab of modifyForm.value" [label]="tab.locale">
+      <mat-tab
+        *ngFor="let tab of modifyForm.controls; let i = index"
+        [label]="tab.get('locale').value"
+      >
         <div style="display: flex; flex-direction: column">
           <mat-form-field>
             <mat-label>Title</mat-label>
-            <input matInput placeholder="Title" type="text" />
+            <input
+              matInput
+              placeholder="Title"
+              type="text"
+              [formControl]="tab.get('title').controls[0].get('translation')"
+            />
           </mat-form-field>
           <mat-form-field>
             <mat-label>Content</mat-label>
-            <textarea placeholder="Content" matInput></textarea>
+            <textarea
+              placeholder="Content"
+              matInput
+              [formControl]="tab.get('content').controls[0].get('translation')"
+            ></textarea>
           </mat-form-field>
         </div>
       </mat-tab>

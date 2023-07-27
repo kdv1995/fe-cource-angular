@@ -49,7 +49,6 @@ export class FormComponent implements OnInit {
       }),
       image: new FormControl(null, {
         validators: [Validators.required],
-        // asyncValidators: [mimeType],
       }),
     });
   }

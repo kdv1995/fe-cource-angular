@@ -1,7 +1,7 @@
 //Core
 import { NgFor, NgIf, TitleCasePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 //Form
 import {
@@ -22,9 +22,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 
 //Route
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Errors } from 'src/app/core/interface/error.iterface';
+
+//Services
+import { PostsService } from 'src/app/services/posts.service';
 import { LanguagesService } from 'src/app/services/languages.service';
-import { IPost } from '../post.interface';
+
+//Interface
+import { IPost, IPostEditRequest, IPostCreateRequest } from '../post.interface';
 
 @Component({
   selector: 'app-modify',
@@ -61,9 +67,11 @@ export class ModifyComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<void>();
 
   constructor(
+    private router: Router,
     private readonly route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    public languageService: LanguagesService
+    public languageService: LanguagesService,
+    private postsService: PostsService
   ) {
     this.post = history.state.post;
   }
@@ -74,8 +82,8 @@ export class ModifyComponent implements OnInit, OnDestroy {
 
   initMultiLanguageDataArray(language: string, value: string): FormGroup {
     return this.formBuilder.group({
-      language: new FormControl(language),
-      translation: new FormControl(value),
+      language: this.formBuilder.control(language),
+      translation: this.formBuilder.control(value),
     });
   }
   createForm() {
@@ -100,21 +108,21 @@ export class ModifyComponent implements OnInit, OnDestroy {
     } else {
       this.modifyForm = this.formBuilder.array([
         this.formBuilder.group({
-          locale: this.formBuilder.control('eng'),
+          locale: this.formBuilder.control('en'),
           title: this.formBuilder.array([
-            this.initMultiLanguageDataArray('', ''),
+            this.initMultiLanguageDataArray('en', ''),
           ]),
           content: this.formBuilder.array([
-            this.initMultiLanguageDataArray('', ''),
+            this.initMultiLanguageDataArray('en', ''),
           ]),
         }),
         this.formBuilder.group({
-          locale: this.formBuilder.control('pt'),
+          locale: this.formBuilder.control('uk'),
           title: this.formBuilder.array([
-            this.initMultiLanguageDataArray('', ''),
+            this.initMultiLanguageDataArray('uk', ''),
           ]),
           content: this.formBuilder.array([
-            this.initMultiLanguageDataArray('', ''),
+            this.initMultiLanguageDataArray('uk', ''),
           ]),
         }),
       ]);
@@ -125,8 +133,25 @@ export class ModifyComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  submitForm(): void {
+  onSubmit(): void {
     this.isSubmitting = true;
+    console.log(this.modifyForm.value);
+
+    let observable =
+      this.modifyType === 'edit'
+        ? this.postsService.editPost(this.modifyForm.value as IPostEditRequest)
+        : this.postsService.addPost(
+            this.modifyForm.value as IPostCreateRequest[]
+          );
+    observable.pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => {
+        this.router.navigate(['/posts']);
+      },
+      error: (err: Errors) => {
+        this.isSubmitting = false;
+      },
+    });
     this.modifyForm.reset();
+    this.isSubmitting = false;
   }
 }

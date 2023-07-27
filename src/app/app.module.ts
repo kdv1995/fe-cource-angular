@@ -28,11 +28,11 @@ import { UserService } from './services/user.service';
 //Locales
 import { registerLocaleData } from '@angular/common';
 import localeEn from '@angular/common/locales/en';
-// import localeUkr from '@angular/common/locales/uk';
+import localeUkr from '@angular/common/locales/uk';
 import { LanguagesService } from './services/languages.service';
 import { LocaleService } from './services/locale.service';
 registerLocaleData(localeEn, 'en');
-// registerLocaleData(localeUkr, 'uk');
+registerLocaleData(localeUkr, 'uk');
 
 export function initAuth(jwtService: JwtService, userService: UserService) {
   return () => (jwtService.getToken() ? userService.getCurrentUser() : EMPTY);

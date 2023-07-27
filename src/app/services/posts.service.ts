@@ -9,6 +9,10 @@ import {
   IPost,
   currentPageRequest,
   IPostResponse,
+  IPostCreateRequest,
+  IPostCreateResponse,
+  IPostEditRequest,
+  IPostEditResponse,
 } from '../components/shared/posts/post/post.interface';
 
 //Environment
@@ -39,8 +43,27 @@ export class PostsService {
   /**
    * addPost
    */
-  public addPost() {
-    return '';
+  public addPost(post: IPostCreateRequest[]): Observable<IPostCreateResponse> {
+    const newPost: IPostCreateRequest[] = post.reduce(
+      (acc: { title: any[]; content: any[]; favourite: number }, elem) => {
+        if (!acc.title) acc.title = [];
+        if (!acc.content) acc.content = [];
+
+        acc.title.push(elem.title);
+        acc.content.push(elem.content);
+        favourite: 0;
+        return acc;
+      },
+      {}
+    );
+    // const newPost: IPostCreateRequest = {
+    //   _id: String(Date.now()),
+    //   title: post.title,
+    //   content: post.content,
+    //   favourite: post.favourite,
+    // };
+    console.log(newPost);
+    return this.http.post<IPostResponse>(`${this.ApiUrl}/posts`, newPost);
   }
 
   /**
@@ -56,7 +79,8 @@ export class PostsService {
   /**
    * editPost
    */
-  public editPost() {
-    return '';
+  public editPost(post: IPostEditRequest): Observable<IPostEditResponse> {
+    const { _id } = post;
+    return this.http.put(`${this.ApiUrl}/posts/${_id}`, post);
   }
 }

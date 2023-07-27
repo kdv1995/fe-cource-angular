@@ -3,15 +3,19 @@ interface IPostData {
   language: string;
 }
 export interface IPostCommentsData extends IPostData {}
+export interface IPostEditRequest extends IPost {}
+export interface IPostEditResponse {}
+export interface IPostCreateRequest extends IPost {}
+export interface IPostCreateResponse {}
 
 export interface IPost {
   _id: string;
   title: IPostData[];
   content: IPostData[];
   favourite: number;
-  createdAt: Date;
-  updatedAt: Date;
-  comments: IPostCommentsData[];
+  createdAt?: Date;
+  updatedAt?: Date;
+  comments?: IPostCommentsData[];
 }
 export interface IPostFiltered
   extends Pick<

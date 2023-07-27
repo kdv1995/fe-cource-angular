@@ -9,7 +9,6 @@ import { ModifyComponent } from './post/modify/modify.component';
 
 //Services
 import { PostsService } from 'src/app/services/posts.service';
-import { LanguagesService } from 'src/app/services/languages.service';
 
 //Materials
 import { MatButtonModule } from '@angular/material/button';
@@ -28,7 +27,6 @@ import { IPost, IPostResponse } from './post/post.interface';
 
 //Pipes
 import { LanguagePipe } from 'src/app/pipes/language.pipe';
-import { LocaleService } from 'src/app/services/locale.service';
 
 @Component({
   selector: 'app-posts',
@@ -51,7 +49,6 @@ import { LocaleService } from 'src/app/services/locale.service';
 })
 export class PostsComponent implements OnInit, OnDestroy {
   currentUrl: string = this.router.url;
-  currentLanguage: string = 'en';
 
   creatingPost: boolean = false;
   editingPost: boolean = false;
@@ -61,12 +58,7 @@ export class PostsComponent implements OnInit, OnDestroy {
 
   destroy$ = new Subject<void>();
 
-  constructor(
-    private postsService: PostsService,
-    public router: Router,
-    private languageService: LanguagesService,
-    private localeService: LocaleService
-  ) {}
+  constructor(private postsService: PostsService, private router: Router) {}
   /**
    * openEditPostPage
    */
@@ -88,9 +80,6 @@ export class PostsComponent implements OnInit, OnDestroy {
     this.posts$ = this.postsService
       .getPaginatedPosts(this.currentPostsPage)
       .pipe(map(({ posts }: IPostResponse) => posts));
-    this.languageService.language$.subscribe((language) => {
-      this.currentLanguage = language;
-    });
   }
   ngOnDestroy() {
     this.destroy$.next();

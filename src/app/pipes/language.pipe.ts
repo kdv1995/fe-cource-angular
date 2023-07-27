@@ -22,7 +22,6 @@ export class LanguagePipe implements PipeTransform {
         ...post,
         title: post.title.filter((ps) => ps.language === language),
         content: post.content.filter((ps) => ps.language === language),
-        comments: post.comments.filter((ps) => ps.language === language),
       };
     });
   }
