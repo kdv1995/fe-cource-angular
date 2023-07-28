@@ -7,7 +7,6 @@ import { Subject, takeUntil } from 'rxjs';
 import {
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -30,7 +29,11 @@ import { PostsService } from 'src/app/services/posts.service';
 import { LanguagesService } from 'src/app/services/languages.service';
 
 //Interface
-import { IPost, IPostEditRequest, IPostCreateRequest } from '../post.interface';
+import {
+  IPostEditRequest,
+  IPostCreateRequest,
+  IPostFiltered,
+} from '../post.interface';
 
 @Component({
   selector: 'app-modify',
@@ -53,7 +56,7 @@ import { IPost, IPostEditRequest, IPostCreateRequest } from '../post.interface';
   standalone: true,
 })
 export class ModifyComponent implements OnInit, OnDestroy {
-  post: IPost;
+  post: IPostFiltered;
 
   modifyForm: FormArray | FormGroup;
   modifyType: string = '';
@@ -89,22 +92,15 @@ export class ModifyComponent implements OnInit, OnDestroy {
   createForm() {
     if (this.currentUrl === 'edit') {
       this.modifyForm = this.formBuilder.group({
-        title: this.formBuilder.group({}),
-        content: this.formBuilder.group({}),
+        title: this.formBuilder.group({
+          language: this.post.title.language,
+          translation: this.post.title.translation,
+        }),
+        content: this.formBuilder.group({
+          language: this.post.content.language,
+          translation: this.post.content.translation,
+        }),
       });
-
-      for (const lang of this.post.title) {
-        (this.modifyForm?.get('title') as FormGroup).addControl(
-          lang.language,
-          this.formBuilder.control(lang.value)
-        );
-      }
-      for (const lang of this.post.content) {
-        (this.modifyForm?.get('content') as FormGroup).addControl(
-          lang.language,
-          this.formBuilder.control(lang.value)
-        );
-      }
     } else {
       this.modifyForm = this.formBuilder.array([
         this.formBuilder.group({
@@ -135,7 +131,6 @@ export class ModifyComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     this.isSubmitting = true;
-    console.log(this.modifyForm.value);
 
     let observable =
       this.modifyType === 'edit'

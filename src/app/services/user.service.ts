@@ -105,6 +105,7 @@ export class UserService {
    * setAuth
    */
   public setAuth(user: ICurrentUser): void {
+    localStorage.setItem('userId', user.id);
     this.jwt.setToken(user.accessToken);
     this.currentUserSubject.next(user);
   }
@@ -114,5 +115,6 @@ export class UserService {
   public deactivateAuth(): void {
     this.jwt.removeToken();
     this.currentUserSubject.next(null);
+    localStorage.removeItem('userId');
   }
 }

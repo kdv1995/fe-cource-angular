@@ -6,13 +6,12 @@ import { Router } from '@angular/router';
 //Http
 import { HttpClient } from '@angular/common/http';
 import {
-  IPost,
-  currentPageRequest,
   IPostResponse,
   IPostCreateRequest,
   IPostCreateResponse,
   IPostEditRequest,
   IPostEditResponse,
+  IPaginationPostsData,
 } from '../components/shared/posts/post/post.interface';
 
 //Environment
@@ -28,10 +27,11 @@ export class PostsService {
    * getPosts
    */
   public getPaginatedPosts(
-    currentPage: currentPageRequest
+    options: IPaginationPostsData
   ): Observable<IPostResponse> {
+    const { pageIndex, pageSize } = options;
     return this.http.get<IPostResponse>(
-      `${this.ApiUrl}/posts/postsByPage?page=${currentPage}`
+      `${this.ApiUrl}/posts/postsByPage?page=${pageIndex}&itemsPerPage=${pageSize}`
     );
   }
   /**
@@ -44,25 +44,23 @@ export class PostsService {
    * addPost
    */
   public addPost(post: IPostCreateRequest[]): Observable<IPostCreateResponse> {
-    const newPost: IPostCreateRequest[] = post.reduce(
-      (acc: { title: any[]; content: any[]; favourite: number }, elem) => {
-        if (!acc.title) acc.title = [];
-        if (!acc.content) acc.content = [];
+    const userId = localStorage.getItem('userId');
+    const newPost = post.reduce(
+      (acc: any, elem: any) => {
+        elem.title.forEach((title: any) => {
+          const { language, translation } = title;
+          acc.title.push({ language, translation });
+        });
 
-        acc.title.push(elem.title);
-        acc.content.push(elem.content);
-        favourite: 0;
+        elem.content.forEach((content: any) => {
+          const { language, translation } = content;
+          acc.content.push({ language, translation });
+        });
+
         return acc;
       },
-      {}
+      { userId, title: [], content: [] }
     );
-    // const newPost: IPostCreateRequest = {
-    //   _id: String(Date.now()),
-    //   title: post.title,
-    //   content: post.content,
-    //   favourite: post.favourite,
-    // };
-    console.log(newPost);
     return this.http.post<IPostResponse>(`${this.ApiUrl}/posts`, newPost);
   }
 

@@ -44,27 +44,29 @@ import { LocaleService } from 'src/app/services/locale.service';
   standalone: true,
 })
 export class HeaderComponent implements OnInit {
-  currentLanguage: string = 'en';
+  currentLanguage: string;
   languages: ILanguages[] = [
     {
       value: 'en',
     },
     {
-      value: 'pt',
+      value: 'uk',
     },
   ];
   constructor(
     private userService: UserService,
-    public languageService: LanguagesService,
-    public localeService: LocaleService,
-    private router: Router
+    public languageService: LanguagesService
   ) {}
   currentUser$ = inject(UserService).currentUser;
   signOut(): void {
     this.userService.signOut().subscribe(() => {});
   }
-  ngOnInit(): void {}
-  switchLanguage(language: string) {
+  ngOnInit(): void {
+    this.languageService.language$.subscribe(
+      (language) => (this.currentLanguage = language)
+    );
+  }
+  switchLanguage(language: string): void {
     this.languageService.setLanguage(language);
   }
 }

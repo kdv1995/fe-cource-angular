@@ -1,33 +1,30 @@
-interface IPostData {
-  value: string;
+export interface IPostData {
+  translation: string;
   language: string;
 }
 export interface IPostCommentsData extends IPostData {}
-export interface IPostEditRequest extends IPost {}
+export interface IPostEditRequest extends IPostCreateForm {}
 export interface IPostEditResponse {}
-export interface IPostCreateRequest extends IPost {}
+export interface IPostCreateRequest extends IPostCreateForm {}
 export interface IPostCreateResponse {}
+export interface IPostCreateForm extends IPost {}
 
 export interface IPost {
   _id: string;
   title: IPostData[];
   content: IPostData[];
   favourite: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface IPostFiltered {
+  _id: string;
+  title: IPostData;
+  content: IPostData;
+  favourite: number;
   createdAt?: Date;
   updatedAt?: Date;
-  comments?: IPostCommentsData[];
 }
-export interface IPostFiltered
-  extends Pick<
-    IPost,
-    | '_id'
-    | 'title'
-    | 'content'
-    | 'favourite'
-    | 'createdAt'
-    | 'updatedAt'
-    | 'comments'
-  > {}
 export interface IPostResponse {
   currentPageNumber: number;
   totalPages: number;
@@ -38,4 +35,12 @@ export interface IPostResponse {
   posts: IPost[];
 }
 
-export type currentPageRequest = number;
+export interface currentPageRequest {
+  currentPage: number;
+  postsPerPage: number;
+}
+export interface IPaginationPostsData {
+  pageSize: number;
+  pageIndex: number;
+  length: number;
+}

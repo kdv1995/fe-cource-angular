@@ -9,3 +9,10 @@
 main {
   flex: 1 1 auto;
 }
+.mat-card,
+.mat-toolbar,
+.mat-list,
+.mat-form-field {
+  margin: 0;
+  padding: 0;
+}

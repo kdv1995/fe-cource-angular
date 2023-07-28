@@ -1,15 +1,27 @@
-<div class="buttons-container">
-  <a
-    *ngIf="!creatingPost && !editingPost"
-    mat-button
-    class="create"
-    routerLink="create"
-    routerLinkActive="active"
-    color="primary"
-  >
-    Create post
-  </a>
-</div>
+<form>
+  <mat-form-field>
+    <mat-form-field>
+      <mat-label>Filter By</mat-label>
+      <mat-select [(value)]="selected">
+        <mat-option>None</mat-option>
+        <mat-option value="option1">Option 1</mat-option>
+        <mat-option value="option2">Option 2</mat-option>
+        <mat-option value="option3">Option 3</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-form-field>
+</form>
+<a
+  *ngIf="!creatingPost && !editingPost"
+  mat-button
+  class="create"
+  routerLink="create"
+  routerLinkActive="active"
+  color="primary"
+>
+  Create post
+</a>
+<!-- </div> -->
 <ul *ngIf="!editingPost && !creatingPost">
   <div *ngIf="posts$ | async as posts">
     <app-post
@@ -19,5 +31,15 @@
     </app-post>
   </div>
 </ul>
-<div *ngIf="!(posts$ | async)">Empty posts list</div>
+<mat-paginator
+  *ngIf="!editingPost && !creatingPost"
+  [length]="paginationPostsData.length"
+  [pageSize]="paginationPostsData.pageSize"
+  [pageSizeOptions]="pageSizeOptions"
+  aria-label="Select page"
+  (page)="onPageChange($event)"
+>
+</mat-paginator>
+
+<div *ngIf="paginationPostsData.length <= 0">Empty posts list</div>
 <router-outlet></router-outlet>

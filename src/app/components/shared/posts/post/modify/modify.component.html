@@ -7,23 +7,16 @@
   (ngSubmit)="onSubmit()"
 >
   <div class="modify-container">
-    <mat-form-field formGroupName="title" *ngFor="let lang of post.title">
-      <mat-label>
-        {{ lang.language | titlecase }}
-      </mat-label>
-      <input
-        placeholder="Title"
-        matInput
-        type="text"
-        [formControlName]="lang.language"
-      />
+    <mat-form-field>
+      <mat-label>{{ modifyForm.value.title.language }}</mat-label>
+      <input placeholder="Title" matInput type="text" formGroupName="title" />
     </mat-form-field>
-    <mat-form-field formGroupName="content" *ngFor="let lang of post.content">
-      <mat-label> {{ lang.language | titlecase }} </mat-label>
+    <mat-form-field>
+      <mat-label>{{ modifyForm.value.content.language }}</mat-label>
       <textarea
         placeholder="Content"
         matInput
-        [formControlName]="lang.language"
+        formGroupName="content"
       ></textarea>
     </mat-form-field>
     <button type="submit" mat-button color="primary">{{ title }}</button>

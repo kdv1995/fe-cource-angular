@@ -6,12 +6,11 @@ li {
   justify-content: center;
   gap: 2rem;
 }
-.nav-menu a {
-  cursor: pointer;
-}
+/* .nav-menu a { */
+/*   cursor: pointer; */
+/* } */
 .nav-menu__authenticated {
   display: flex;
-  justify-content: center;
   gap: 2rem;
 }
 .nav {

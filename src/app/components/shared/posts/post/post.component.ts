@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { IPost } from './post.interface';
+import { IPostFiltered } from './post.interface';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
@@ -24,8 +24,8 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class PostComponent {
   constructor(private router: Router) {}
-  @Input() post: IPost;
-  editPost(post: IPost): void {
+  @Input() post: IPostFiltered;
+  editPost(post: IPostFiltered): void {
     this.router.navigate(['posts/edit', post._id], { state: { post } });
   }
 }
