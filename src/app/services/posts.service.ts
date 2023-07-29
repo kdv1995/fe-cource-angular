@@ -78,7 +78,14 @@ export class PostsService {
    * editPost
    */
   public editPost(post: IPostEditRequest): Observable<IPostEditResponse> {
-    const { _id } = post;
-    return this.http.put(`${this.ApiUrl}/posts/${_id}`, post);
+    console.log(post);
+    const { id, title, content } = post;
+    const updatedPost: IPostEditRequest = {
+      id,
+      language: post.title.language,
+      title,
+      content,
+    };
+    return this.http.put(`${this.ApiUrl}/posts/${id}`, updatedPost);
   }
 }

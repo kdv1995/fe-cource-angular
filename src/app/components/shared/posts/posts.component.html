@@ -10,8 +10,10 @@
     Create post
   </a>
 </div>
+<div *ngIf="!paginationPostsData">Empty posts list</div>
+
 <!-- </div> -->
-<ul *ngIf="!editingPost && !creatingPost">
+<ul *ngIf="!editingPost && !creatingPost && paginationPostsData">
   <mat-form-field>
     <mat-label>Select filter type </mat-label>
     <mat-select [(value)]="selectedFilterType">
@@ -39,5 +41,4 @@
 >
 </mat-paginator>
 
-<div *ngIf="paginationPostsData.length <= 0">Empty posts list</div>
 <router-outlet></router-outlet>

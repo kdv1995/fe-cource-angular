@@ -2,13 +2,18 @@ export interface IPostData {
   translation: string;
   language: string;
 }
-export interface IPostCommentsData extends IPostData {}
-export interface IPostEditRequest extends IPostCreateForm {}
+// export interface IPostCommentsData extends IPostData {}
 export interface IPostEditResponse {}
 export interface IPostCreateRequest extends IPostCreateForm {}
 export interface IPostCreateResponse {}
 export interface IPostCreateForm extends IPost {}
 
+export interface IPostEditRequest {
+  id: string;
+  language: string;
+  title: IPostData;
+  content: IPostData;
+}
 export interface IPost {
   _id: string;
   title: IPostData[];

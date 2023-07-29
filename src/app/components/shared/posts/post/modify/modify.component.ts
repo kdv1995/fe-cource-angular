@@ -92,6 +92,7 @@ export class ModifyComponent implements OnInit, OnDestroy {
   createForm() {
     if (this.currentUrl === 'edit') {
       this.modifyForm = this.formBuilder.group({
+        id: this.post._id,
         title: this.formBuilder.group({
           language: this.post.title.language,
           translation: this.post.title.translation,
@@ -123,6 +124,7 @@ export class ModifyComponent implements OnInit, OnDestroy {
         }),
       ]);
     }
+    console.log(this.modifyForm.value);
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -133,7 +135,7 @@ export class ModifyComponent implements OnInit, OnDestroy {
     this.isSubmitting = true;
 
     let observable =
-      this.modifyType === 'edit'
+      this.currentUrl === 'edit'
         ? this.postsService.editPost(this.modifyForm.value as IPostEditRequest)
         : this.postsService.addPost(
             this.modifyForm.value as IPostCreateRequest[]

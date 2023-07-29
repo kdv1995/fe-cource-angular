@@ -16,7 +16,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatListModule } from '@angular/material/list';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatOption, MatOptionModule } from '@angular/material/core';
+import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 
 //Router
@@ -73,8 +73,8 @@ export class PostsComponent implements OnInit, OnDestroy {
   posts$: Observable<IPost[]>;
   paginationPostsData: IPaginationPostsData = {
     pageIndex: 1,
-    pageSize: 10,
-    length: 10,
+    pageSize: 15,
+    length: 15,
   };
 
   destroy$ = new Subject<void>();
@@ -97,14 +97,15 @@ export class PostsComponent implements OnInit, OnDestroy {
     this.posts$ = this.postsService
       .getPaginatedPosts(this.paginationPostsData)
       .pipe(
-        map(({ posts }) => {
+        map(({ currentPageNumber, postsByPage, countOfPosts, posts }) => {
+          this.paginationPostsData = {
+            pageIndex: currentPageNumber,
+            pageSize: postsByPage,
+            length: countOfPosts,
+          };
           return posts;
         })
       );
-  }
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
   onPageChange(event: PageEvent) {
     this.paginationPostsData = {
@@ -116,18 +117,20 @@ export class PostsComponent implements OnInit, OnDestroy {
       .getPaginatedPosts(this.paginationPostsData)
       .pipe(
         map(({ postsByPage, posts, currentPageNumber }) => {
-          this.paginationPostsData.length = postsByPage;
           this.paginationPostsData.pageSize = postsByPage;
           this.paginationPostsData.pageIndex = currentPageNumber;
           return posts;
         }),
         map((posts) => posts)
       );
-    console.log(this.paginationPostsData);
   }
-  private filterPostsByPagination(posts: IPost[]): IPost[] {
-    const startIndex = this.paginationPostsData.pageIndex - 1;
-    const endIndex = startIndex + this.paginationPostsData.pageSize;
-    return posts.slice(startIndex, endIndex);
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
+  // private filterPostsByPagination(posts: IPost[]): IPost[] {
+  //   const startIndex = this.paginationPostsData.pageIndex - 1;
+  //   const endIndex = startIndex + this.paginationPostsData.pageSize;
+  //   return posts.slice(startIndex, endIndex);
+  // }
 }
