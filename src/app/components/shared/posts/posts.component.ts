@@ -59,6 +59,9 @@ import { LanguagesService } from 'src/app/services/languages.service';
   standalone: true,
 })
 export class PostsComponent implements OnInit, OnDestroy {
+  selectedFilterType: string = 'User';
+  filterTypeArray: string[] = ['User', 'Date', 'Latest'];
+  userId: string | null = localStorage.getItem('userId');
   selected: string = '';
   currentLanguage: string;
   currentUrl: string = this.router.url;

@@ -1,28 +1,26 @@
-<form>
-  <mat-form-field>
-    <mat-form-field>
-      <mat-label>Filter By</mat-label>
-      <mat-select [(value)]="selected">
-        <mat-option>None</mat-option>
-        <mat-option value="option1">Option 1</mat-option>
-        <mat-option value="option2">Option 2</mat-option>
-        <mat-option value="option3">Option 3</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </mat-form-field>
-</form>
-<a
-  *ngIf="!creatingPost && !editingPost"
-  mat-button
-  class="create"
-  routerLink="create"
-  routerLinkActive="active"
-  color="primary"
->
-  Create post
-</a>
+<div>
+  <a
+    *ngIf="!creatingPost && !editingPost"
+    mat-button
+    class="create"
+    routerLink="create"
+    routerLinkActive="active"
+    color="primary"
+  >
+    Create post
+  </a>
+</div>
 <!-- </div> -->
 <ul *ngIf="!editingPost && !creatingPost">
+  <mat-form-field>
+    <mat-label>Select filter type </mat-label>
+    <mat-select [(value)]="selectedFilterType">
+      <mat-option *ngFor="let type of filterTypeArray" [value]="type">{{
+        type
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <div *ngIf="posts$ | async as posts">
     <app-post
       *ngFor="let post of posts | language : currentLanguage"
