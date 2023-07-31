@@ -1,9 +1,9 @@
 //Core
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
+import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { environment } from '../environments/environment'
 
-import { Router } from '@angular/router';
+import { Router } from '@angular/router'
 import {
   BehaviorSubject,
   distinctUntilChanged,
@@ -11,64 +11,66 @@ import {
   Observable,
   shareReplay,
   tap,
-} from 'rxjs';
+} from 'rxjs'
 
 //Interfaces
 import {
+  IAllUsers,
   ICurrentUser,
   IUser,
   IUserSignInRequest,
   IUserSignInResponse,
   IUserSignUpRequest,
   IUserSignUpResponse,
-} from '../core/interface/user.interface';
+} from '../core/interface/user.interface'
 
 //Services
-import { JwtService } from './jwt.service';
+import { JwtService } from './jwt.service'
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private currentUserSubject = new BehaviorSubject<ICurrentUser | null>(null);
+  private currentUserSubject = new BehaviorSubject<ICurrentUser | null>(null)
+  public allUser = new BehaviorSubject<IAllUsers | null>(null)
 
   public currentUser = this.currentUserSubject
     .asObservable()
-    .pipe(distinctUntilChanged());
+    .pipe(distinctUntilChanged())
 
-  public isAuthenticated = this.currentUser.pipe(map((user) => !!user));
+  public isAuthenticated = this.currentUser.pipe(map((user) => !!user))
 
-  private ApiUrl = environment.apiUrl;
+  private ApiUrl = environment.apiUrl
 
   constructor(
     private readonly http: HttpClient,
     private readonly jwt: JwtService,
-    private readonly router: Router
+    private readonly router: Router,
   ) {}
 
   /**
    * signIn
    */
   public signIn(
-    credentials: IUserSignInRequest
+    credentials: IUserSignInRequest,
   ): Observable<{ user: IUserSignInResponse }> {
     return this.http
       .post<{ user: IUserSignInResponse }>(`${this.ApiUrl}/signin`, {
         user: credentials,
       })
-      .pipe(tap(({ user }) => this.setAuth(user)));
+      .pipe(tap(({ user }) => this.setAuth(user)))
   }
   /**
    * signUp
    */
   public signUp(
-    credentials: IUserSignUpRequest
+    credentials: IUserSignUpRequest,
   ): Observable<{ user: IUserSignUpResponse }> {
     return this.http
       .post<{ user: IUserSignUpResponse }>(`${this.ApiUrl}/signup`, {
         user: credentials,
       })
-      .pipe(tap(({ user }) => this.setAuth(user)));
+      .pipe(tap(({ user }) => this.setAuth(user)))
   }
 
   /**
@@ -78,14 +80,14 @@ export class UserService {
     return this.http.get<{ user: IUser }>(`${this.ApiUrl}/signout`).pipe(
       tap({
         next: () => {
-          this.deactivateAuth();
-          this.router.navigate(['/']);
+          this.deactivateAuth()
+          this.router.navigate(['/'])
         },
         error: () => {
-          this.deactivateAuth();
+          this.deactivateAuth()
         },
-      })
-    );
+      }),
+    )
   }
 
   /**
@@ -97,24 +99,30 @@ export class UserService {
         next: ({ user }) => this.setAuth(user),
         error: () => this.deactivateAuth(),
       }),
-      shareReplay(1)
-    );
+      shareReplay(1),
+    )
+  }
+  /**
+   * getAllUser
+   */
+  public getAllUser(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.ApiUrl}/users`)
   }
 
   /**
    * setAuth
    */
   public setAuth(user: ICurrentUser): void {
-    localStorage.setItem('userId', user.id);
-    this.jwt.setToken(user.accessToken);
-    this.currentUserSubject.next(user);
+    localStorage.setItem('userId', user.id)
+    this.jwt.setToken(user.accessToken)
+    this.currentUserSubject.next(user)
   }
   /**
    * deactivateAuth
    */
   public deactivateAuth(): void {
-    this.jwt.removeToken();
-    this.currentUserSubject.next(null);
-    localStorage.removeItem('userId');
+    this.jwt.removeToken()
+    this.currentUserSubject.next(null)
+    localStorage.removeItem('userId')
   }
 }

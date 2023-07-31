@@ -2,7 +2,10 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "types": ["node", "@angular/localize"],
+    "types": [
+      "node",
+      "@angular/localize"
+    ],
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
@@ -20,12 +23,13 @@
     "target": "es2022",
     "module": "es2022",
     "useDefineForClassFields": false,
-    "lib": ["es2022", "dom"],
+    "lib": [
+      "es2022",
+      "dom"
+    ],
     "strictPropertyInitialization": false
   },
   "angularCompilerOptions": {
     "strictTemplate": true
   },
-
-  "useDefineForClassFields": false
 }

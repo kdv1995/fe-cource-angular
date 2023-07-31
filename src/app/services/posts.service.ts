@@ -1,10 +1,10 @@
 //Core
-import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
-import { Router } from '@angular/router';
+import { Injectable } from '@angular/core'
+import { Observable, tap } from 'rxjs'
+import { Router } from '@angular/router'
 
 //Http
-import { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http'
 import {
   IPostResponse,
   IPostCreateRequest,
@@ -12,27 +12,39 @@ import {
   IPostEditRequest,
   IPostEditResponse,
   IPaginationPostsData,
-} from '../components/shared/posts/post/post.interface';
+  IPostByUser,
+} from '../components/shared/posts/post/post.interface'
 
 //Environment
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environment'
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostsService {
-  ApiUrl = environment.apiUrl;
-  constructor(private http: HttpClient, private router: Router) {}
+  ApiUrl = environment.apiUrl
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
   /**
    * getPosts
    */
   public getPaginatedPosts(
-    options: IPaginationPostsData
+    options: IPaginationPostsData,
   ): Observable<IPostResponse> {
-    const { pageIndex, pageSize } = options;
+    const { pageIndex, pageSize } = options
+    console.log(options)
+
     return this.http.get<IPostResponse>(
-      `${this.ApiUrl}/posts/postsByPage?page=${pageIndex}&itemsPerPage=${pageSize}`
-    );
+      `${this.ApiUrl}/posts/postsByPage?page=${pageIndex}&itemsPerPage=${pageSize}`,
+    )
+  }
+  /**
+   * getPostsByUser
+   */
+  public getPostsByUserID(userId: string) {
+    return this.http.get<any[]>(`${this.ApiUrl}/posts/${userId}`)
   }
   /**
    * getPost
@@ -44,24 +56,24 @@ export class PostsService {
    * addPost
    */
   public addPost(post: IPostCreateRequest[]): Observable<IPostCreateResponse> {
-    const userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId')
     const newPost = post.reduce(
       (acc: any, elem: any) => {
         elem.title.forEach((title: any) => {
-          const { language, translation } = title;
-          acc.title.push({ language, translation });
-        });
+          const { language, translation } = title
+          acc.title.push({ language, translation })
+        })
 
         elem.content.forEach((content: any) => {
-          const { language, translation } = content;
-          acc.content.push({ language, translation });
-        });
+          const { language, translation } = content
+          acc.content.push({ language, translation })
+        })
 
-        return acc;
+        return acc
       },
-      { userId, title: [], content: [] }
-    );
-    return this.http.post<IPostResponse>(`${this.ApiUrl}/posts`, newPost);
+      { userId, title: [], content: [] },
+    )
+    return this.http.post<IPostResponse>(`${this.ApiUrl}/posts`, newPost)
   }
 
   /**
@@ -78,14 +90,14 @@ export class PostsService {
    * editPost
    */
   public editPost(post: IPostEditRequest): Observable<IPostEditResponse> {
-    console.log(post);
-    const { id, title, content } = post;
+    console.log(post)
+    const { id, title, content } = post
     const updatedPost: IPostEditRequest = {
       id,
       language: post.title.language,
       title,
       content,
-    };
-    return this.http.put(`${this.ApiUrl}/posts/${id}`, updatedPost);
+    }
+    return this.http.put(`${this.ApiUrl}/posts/${id}`, updatedPost)
   }
 }

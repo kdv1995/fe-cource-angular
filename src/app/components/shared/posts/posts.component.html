@@ -1,44 +1,57 @@
 <div>
-  <a
-    *ngIf="!creatingPost && !editingPost"
-    mat-button
-    class="create"
-    routerLink="create"
-    routerLinkActive="active"
-    color="primary"
-  >
+  <a *ngIf="!creatingPost && !editingPost" mat-button class="create" routerLink="create" routerLinkActive="active"
+    color="primary">
     Create post
   </a>
 </div>
+
 <div *ngIf="!paginationPostsData">Empty posts list</div>
 
-<!-- </div> -->
-<ul *ngIf="!editingPost && !creatingPost && paginationPostsData">
-  <mat-form-field>
-    <mat-label>Select filter type </mat-label>
-    <mat-select [(value)]="selectedFilterType">
-      <mat-option *ngFor="let type of filterTypeArray" [value]="type">{{
-        type
+<mat-form-field>
+  <mat-label>Select filter type</mat-label>
+  <mat-select [(value)]="selectedFilterType" (selectionChange)="onSelectionChangeByFilterType($event)">
+    <mat-option *ngFor="let type of filterTypeArray" [value]="type">{{
+      type
       }}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<div *ngIf="users$ | async as users">
+  <mat-form-field>
+    <mat-label> Select user </mat-label>
+    <mat-select [(value)]="selectedUserID" (selectionChange)="onSelectionChangeForPostsByUsers($event)">
+      <mat-option *ngFor="let user of users" [value]="user._id">
+        {{ user.username }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
+</div>
+<!---->
+<!-- <ul *ngIf="!editingPost && !creatingPost && paginationPostsData"> -->
+<!--   <div *ngIf="posts$ | async as posts"> -->
+<!--     <app-post *ngFor="let post of posts$ | async | language: currentLanguage" [post]="post"> -->
+<!--     </app-post> -->
+<!--   </div> -->
+<!-- </ul> -->
+<!---->
+<!-- <mat-paginator *ngIf="!editingPost && !creatingPost" [length]="paginationPostsData.length" -->
+<!--   [pageSize]="paginationPostsData.pageSize" [pageSizeOptions]="pageSizeOptions" aria-label="Select page" -->
+<!--   (page)="onPageChange($event)"> -->
+<!-- </mat-paginator> -->
 
-  <div *ngIf="posts$ | async as posts">
-    <app-post
-      *ngFor="let post of posts | language : currentLanguage"
-      [post]="post"
-    >
-    </app-post>
+<ul *ngIf="posts$ | async as posts; else loadingPosts">
+  <div>
+    <app-post *ngFor="let post of posts | language: currentLanguage" [post]="post"></app-post>
   </div>
 </ul>
-<mat-paginator
-  *ngIf="!editingPost && !creatingPost"
-  [length]="paginationPostsData.length"
-  [pageSize]="paginationPostsData.pageSize"
-  [pageSizeOptions]="pageSizeOptions"
-  aria-label="Select page"
-  (page)="onPageChange($event)"
->
+
+<ng-template #loadingPosts>
+  <div>Loading posts...</div>
+</ng-template>
+
+<mat-paginator *ngIf="!editingPost && !creatingPost" [length]="paginationPostsData.length"
+  [pageSize]="paginationPostsData.pageSize" [pageSizeOptions]="pageSizeOptions" aria-label="Select page"
+  (page)="onPageChange($event)">
 </mat-paginator>
 
 <router-outlet></router-outlet>
